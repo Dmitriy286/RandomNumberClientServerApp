@@ -1,9 +1,13 @@
-package com.example.incrcliservapp.models;
+package com.example.randomnumberclientserverapp.models;
 
-import com.example.incrcliservapp.server.ServerEndPoint;
-import com.example.incrcliservapp.dao.UserDAO;
+import com.example.randomnumberclientserverapp.server.ServerEndPoint;
+import com.example.randomnumberclientserverapp.dao.UserDAO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class User {
+    private final Logger log = LoggerFactory.getLogger(User.class);
+
     static int idCount;
     int userId;
     int gitHubId;
@@ -12,7 +16,8 @@ public class User {
     ServerEndPoint clientConnection;
 
     public User() {
-
+        this.userId = ++idCount;
+        log.info("User with empty fields created");
     }
 
     public User(String login, String gitHubToken, int gitHubId) {
@@ -20,7 +25,9 @@ public class User {
         this.login = login;
         this.gitHubToken = gitHubToken;
         this.gitHubId = gitHubId;
+        log.info("User created");
         UserDAO.addUser(this);
+        log.info("User added to the repository");
     }
 
     public String getLogin() {
@@ -37,10 +44,6 @@ public class User {
 
     public void setGitHubToken(String gitHubToken) {
         this.gitHubToken = gitHubToken;
-    }
-
-    public ServerEndPoint getClientConnection() {
-        return clientConnection;
     }
 
     public void setClientConnection(ServerEndPoint clientConnection) {

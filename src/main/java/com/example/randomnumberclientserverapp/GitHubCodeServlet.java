@@ -1,7 +1,9 @@
-package com.example.incrcliservapp;
+package com.example.randomnumberclientserverapp;
 
-import com.example.incrcliservapp.service.GitHubApi;
-import com.example.incrcliservapp.models.User;
+import com.example.randomnumberclientserverapp.service.GitHubApi;
+import com.example.randomnumberclientserverapp.models.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,11 +14,12 @@ import java.io.IOException;
 
 @WebServlet(value = "/code")
 public class GitHubCodeServlet extends HttpServlet {
+    private final static Logger log = LoggerFactory.getLogger(User.class);
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String code = request.getParameter("code");
-        System.out.println("Code from GitHub: " + code);
+        log.info("Code from GitHub: {}", code);
 
         GitHubApi gitApi = new GitHubApi(code);
         User newUser = gitApi.createOrRestoreUser();

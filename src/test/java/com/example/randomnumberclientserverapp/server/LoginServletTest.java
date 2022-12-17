@@ -6,12 +6,9 @@ import org.mockito.Mockito;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.*;
 
 public class LoginServletTest extends Mockito {
 
@@ -20,8 +17,8 @@ public class LoginServletTest extends Mockito {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
 
-        when(request.getParameter("login")).thenReturn("me");
-        when(request.getParameter("token")).thenReturn("secret");
+        when(request.getParameter("login")).thenReturn("Username");
+        when(request.getParameter("token")).thenReturn("GitHubToken");
 
         StringWriter stringWriter = new StringWriter();
         PrintWriter writer = new PrintWriter(stringWriter);
@@ -31,6 +28,6 @@ public class LoginServletTest extends Mockito {
 
         verify(request, atLeast(1)).getParameter("login");
         writer.flush();
-        assertTrue(stringWriter.toString().contains("My expected string"));
+        assertTrue(stringWriter.toString().contains("Username"));
     }
 }

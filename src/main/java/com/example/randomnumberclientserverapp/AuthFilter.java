@@ -1,7 +1,9 @@
-package com.example.incrcliservapp;
+package com.example.randomnumberclientserverapp;
 
-import com.example.incrcliservapp.dao.UserDAO;
-import com.example.incrcliservapp.models.User;
+import com.example.randomnumberclientserverapp.dao.UserDAO;
+import com.example.randomnumberclientserverapp.models.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -12,6 +14,8 @@ import java.io.IOException;
 
 @WebFilter(value = "/auth")
 public class AuthFilter implements Filter {
+    private final static Logger log = LoggerFactory.getLogger(User.class);
+
     private ServletContext context;
 
     @Override
@@ -21,12 +25,12 @@ public class AuthFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        System.out.println("Init doAuthFilter");
+        log.info("Init doAuthFilter");
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
         String uri = request.getRequestURI();
-        System.out.println("Requested Resource::" + uri);
+        log.info("Requested Resource::" + uri);
 
         String tokenFromSession = "null token";
         String loginFromSession = "";
@@ -35,27 +39,19 @@ public class AuthFilter implements Filter {
 
 
         if (session != null) {
-            System.out.println("session id:");
-            System.out.println(session.getId());
             loginFromSession = (String) session.getAttribute("login");
             tokenFromSession = (String) session.getAttribute("token");
-            System.out.println("tokenFromSession:");
-            System.out.println(tokenFromSession);
-            System.out.println("loginFromSession");
-            System.out.println(loginFromSession);
             User userToCompare = UserDAO.userIsExist(loginFromSession) ?
                     UserDAO.findUserByLogin(loginFromSession) : new User("", "no token", 0);
-            System.out.println("userToCompare:");
-            System.out.println(userToCompare);
             if (tokenFromSession.equals(userToCompare.getGitHubToken())) {
-                System.out.println("Access granted");
+                log.info("Access granted");
                 filterChain.doFilter(servletRequest, servletResponse);
             } else {
-                System.out.println("Unauthorized access request (inner)");
+                log.warn("Unauthorized access request (inner)");
                 response.sendRedirect("index.html");
             }
         } else {
-            System.out.println("Unauthorized access request (outer)");
+            log.warn("Unauthorized access request (outer)");
             response.sendRedirect("index.html");
         }
     }

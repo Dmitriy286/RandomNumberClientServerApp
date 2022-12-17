@@ -10,17 +10,11 @@
 
         function authorization() {
             let href = document.location.href;
-            console.log(href);
             let re = /\?token=(.+)&login=(.+)/;
 
             if (re.exec(href) != null) {
                 let token = re.exec(href)[1];
                 let login = re.exec(href)[2];
-
-                console.log(token);
-                console.log(login);
-                alert(token);
-                alert(login);
 
                 document.getElementById("login").value = login;
                 document.getElementById("token").value = token;

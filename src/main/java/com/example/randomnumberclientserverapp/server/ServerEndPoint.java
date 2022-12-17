@@ -1,6 +1,9 @@
-package com.example.incrcliservapp.server;
+package com.example.randomnumberclientserverapp.server;
 
-import com.example.incrcliservapp.dao.UserDAO;
+import com.example.randomnumberclientserverapp.dao.UserDAO;
+import com.example.randomnumberclientserverapp.models.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
@@ -12,6 +15,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 @ServerEndpoint(value = "/ws/{login}")
 public class ServerEndPoint {
+    private final static Logger log = LoggerFactory.getLogger(User.class);
 
     static List<ServerEndPoint> clients = new CopyOnWriteArrayList<>();
     private Session session;
@@ -19,23 +23,24 @@ public class ServerEndPoint {
 
     @OnOpen
     public void onOpen(Session session, @PathParam("login") String login, EndpointConfig _) {
-        System.out.println("login in ServerEndPoint:");
-        System.out.println(login);
+        log.info("Login passed to ServerEndPoint: {}", login);
         if (clients.isEmpty()) {
             randomNumberGen.start();
         }
         this.session = session;
         clients.add(this);
         UserDAO.findUserByLogin(login).setClientConnection(this);
-        System.out.println("New client added");
-        System.out.println(UserDAO.findUserByLogin(login));
+        log.info("New client added: {}", UserDAO.findUserByLogin(login));
     }
 
     @OnClose
     public void onClose(Session session, CloseReason reason) {
-        System.out.println("Socket closed: " + reason.getReasonPhrase());
+        log.warn("Socket closed: {}", reason.getReasonPhrase());
         clients.remove(this);
-        System.out.println("One of the clients has logged out");
+        log.info("One of the clients has logged out");
+        if (clients.isEmpty()) {
+            randomNumberGen.interrupt();
+        }
     }
 
     /**
@@ -49,7 +54,7 @@ public class ServerEndPoint {
                 client.session.getBasicRemote().sendText(message.toString());
             } catch (IOException e) {
                 clients.remove(this);
-                System.out.println("Removing client...");
+                log.info("Removing client...");
                 try {
                     client.session.close();
                 } catch (IOException e1) {
@@ -75,10 +80,11 @@ public class ServerEndPoint {
 
         @Override
         public void run() {
+            log.info("Broadcasting started");
             while (true) {
                 randomNumber = random.nextInt();
                 broadcast(randomNumber);
-                System.out.println(randomNumber);
+                log.info("Broadcasted: {}", randomNumber);
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {

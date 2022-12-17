@@ -1,7 +1,9 @@
-package com.example.incrcliservapp;
+package com.example.randomnumberclientserverapp;
 
-import com.example.incrcliservapp.dao.UserDAO;
-import com.example.incrcliservapp.models.User;
+import com.example.randomnumberclientserverapp.dao.UserDAO;
+import com.example.randomnumberclientserverapp.models.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,9 +12,10 @@ import java.io.IOException;
 
 @WebServlet("/logout")
 public class LogOutServlet extends HttpServlet {
+    private final static Logger log = LoggerFactory.getLogger(User.class);
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         final HttpSession session = request.getSession(false);
         if (session != null) {
@@ -24,6 +27,7 @@ public class LogOutServlet extends HttpServlet {
             session.removeAttribute("login");
             session.removeAttribute("token");
             session.invalidate();
+            log.info("Session has been invalidated");
         }
         try {
             Thread.sleep(1000);
@@ -32,11 +36,12 @@ public class LogOutServlet extends HttpServlet {
         }
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie : cookies) {
-
-            System.out.println("::Cookie::{" + cookie.getName() + "," + cookie.getValue() + "}");
             cookie.setValue("");
             response.addCookie(cookie);
         }
+        log.info("Cookies have been deleted");
+        log.info("Redirecting to the main page...");
+
         response.sendRedirect("index.html");
     }
 }

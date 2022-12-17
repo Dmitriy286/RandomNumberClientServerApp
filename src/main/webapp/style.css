@@ -1,22 +1,86 @@
-/* -----  google Font  -----*/
-@import url('https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap');
+
+* {
+    font-family: 'Inter', sans-serif;
+}
 
 body {
-    margin: 0;
-    padding: 0;
-    font-family: Roboto, sans-serif;
-}
-.dws-wrapper {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    text-align: center;
+    background-color: #ededf0;
+    color: black;
+    align-items: stretch;
+    margin-top: 10px;
+
 }
 
-/* -----  Выравнивание по середине  -----*/
-.dws-wrapper {
-    display: flex;
-    height: 100vh;
-    justify-content: center;
-    align-items: center;
+a {
+    display: inline-block;
+    height: 80px;
+    width: 80px;
+    background: lightgrey;
+    margin: 0;
+    border-radius: 30%;
+    text-align: center;
+    vertical-align: center;
+    font-size:36px;
+    border: 4px solid black;
+}
+
+a > i {
+    color: black;
+    margin-top: 20px;
+}
+
+
+a:hover {
+    background: black;
+    transition: 0.5s;
+    color: #ffcf0c;
+}
+
+a:hover > i {
+    color: #ffcf0c;
+    transition: 0.5s;
+    transform: scale(1.6);
+}
+
+h1 {
+    display: inline-block;
+    background: black;
+    color: #ededf0;
+    margin: 40px;
+    border-radius: 5px;
+    text-align: center;
+    padding: 20px;
+}
+
+h3 {
+    display: inline-block;
+    background: black;
+    color: yellow;
+    margin: 100px 20px 20px;
+    border-radius: 5px;
+    text-align: center;
+    padding: 10px;
+}
+
+.logout-button {
+    color: #ededf0;
+    background-color: black;
+    font-size: 24px;
+    border-radius: 5px;
+    margin: 40px;
+    padding: 15px;
+    cursor: pointer;
+}
+
+.logout-button:hover {
+    transition: 1s;
+    color: #ffcf0c;
+}
+
+.data-from-server {
+    margin-top: 100px;
+    color: darkred;
+    font-size: 24px;
 }

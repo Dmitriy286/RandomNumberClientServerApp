@@ -1,8 +1,10 @@
-package com.example.incrcliservapp;
+package com.example.randomnumberclientserverapp;
 
 
-import com.example.incrcliservapp.dao.UserDAO;
-import com.example.incrcliservapp.models.User;
+import com.example.randomnumberclientserverapp.dao.UserDAO;
+import com.example.randomnumberclientserverapp.models.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.*;
 import java.io.IOException;
@@ -13,6 +15,7 @@ import javax.servlet.http.*;
 
 @WebFilter(value = "/login")
 public class LoginFilter implements Filter {
+    private final static Logger log = LoggerFactory.getLogger(User.class);
 
     private ServletContext context;
 
@@ -21,27 +24,20 @@ public class LoginFilter implements Filter {
     }
 
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        System.out.println("Init doLoginFilter");
+        log.info("Init doLoginFilter");
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        HttpServletResponse response = (HttpServletResponse) servletResponse;
 
         String tokenFromFront = request.getParameter("token");
         String login = request.getParameter("login");
-        System.out.println(tokenFromFront);
-        System.out.println(login);
-
-        String uri = request.getRequestURI();
-        System.out.println("Requested Resource::" + uri);
 
         User userToCompare = UserDAO.findUserByLogin(login);
-        System.out.println("userToCompare.getGitHubToken():");
-        System.out.println(userToCompare.getGitHubToken());
+
         if (userToCompare.getGitHubToken().equals(tokenFromFront)) {
             filterChain.doFilter(servletRequest, servletResponse);
         } else {
             PrintWriter out = servletResponse.getWriter();
             out.println("<font color=red>Username is incorrect or token is expired</font>");
-            System.out.println("<font color=red>Username is incorrect or token is expired</font>");
+            log.error("Username is incorrect or token is expired");
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
