@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Форма для авторизации</title>
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <script type="text/javascript">
+        function gitHubOAuth() {
+
+            var xhr = new XMLHttpRequest()
+            xhr.open(
+                'GET',
+                'https://cors-anywhere.herokuapp.com/https://github.com/login/oauth/authorize?client_id=8d45b84171f5ae17cfce',
+                true
+            )
+            xhr.send()
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState != 4) {
+                    return
+                }
+
+                if (xhr.status === 200) {
+                    console.log('result', xhr.responseText)
+                    // console.log('result', JSON.parse(xhr.responseText))
+                } else {
+                    console.log('err', xhr.responseText)
+                }
+            }
+
+            // let getResult = "code";
+
+            //post запрос, получаем результат:
+            // let postResult = "username", "token";
+
+            //post запрос на сервер для регистрации пользователя
+
+            //автоавторизация, разрешение доступа, редирект на страницу echo.html
+
+
+            // authorization("sdf");
+        }
+
+        function authorization() {
+            // document.getElementById("username").value = 'username';
+            // document.getElementById("username").textContent = somemap['username'];
+            // document.getElementById("password").value = 'password';
+            // document.getElementById("password").textContent = somemap['password'];
+            document.getElementById("token").value = 'qwerty';
+
+            document.getElementById("form").submit();
+            // alert(document.getElementById("username").value)
+            // alert(document.getElementById("password").value)
+            // window.location.href = "http://localhost:8080/echo.html"
+        }
+    </script>
+</head>
+<body>
+
+<!--<form id="form" class="tab-form" action="j_security_check" method="post">-->
+<!--    <input hidden="hidden" type="text" name="j_username" id="username"></input>-->
+<!--    <input hidden="hidden" type="password" name="j_password" id="password"></input>-->
+<!--    <input id="submitform" type="submit" value="login"/>-->
+<!--</form>-->
+
+
+<form method="post" action="/login" id="form">
+<!--<form method="post" action="${pageContext.request.contextPath}/login" id="form">-->
+
+<!--    <input hidden="hidden" id="username" type="text" name="login"><br>-->
+<!--    <input hidden="hidden" id="password" type="password" name="password"><br><br>-->
+    <input hidden="hidden" id="token" type="password" name="token"><br><br>
+<!--    <input hidden="hidden" id="submitform" type="submit">-->
+
+</form>
+
+
+<button onclick="getDataForLogin();">Login</button>
+<button onclick="authorization();">Test</button>
+
+<button onclick="gitHubOAuth();">Login with GitHub</button>
+
+<br>
+<a href="https://github.com/login/oauth/authorize?client_id=8d45b84171f5ae17cfce"
+   title="Login with GitHub">Login with GitHub</a>
+
+</body>
+</html>

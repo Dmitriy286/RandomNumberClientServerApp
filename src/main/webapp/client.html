@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="ISO-8859-1">
+    <title>Chatroom</title>
+    <!--    <script type="text/javascript" src="scripts/echo.js">-->
+    <script type="text/javascript">
+        let re = /login=(.+);*/
+        let cookie = document.cookie;
+        console.log("cookie:")
+        console.log(cookie);
+        let login = re.exec(cookie)[1];
+        // function readCookie(name) {
+        //     var matches = document.cookie.match(new RegExp(
+        //         "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+        //     ));
+        //     return matches ? decodeURIComponent(matches[1]) : undefined;
+        // }
+
+        console.log("login")
+        console.log(login)
+        var websocket = new WebSocket(`ws://localhost:8080/ws/chat/${login}`);
+
+        websocket.onopen = function (e) {
+            console.log("[open] Connection established");
+        };
+
+        websocket.onmessage = function (event) {
+            console.log("Message received:");
+            console.log(event);
+            console.log(event.data);
+            if (event.data != null) {
+                document.getElementById("dataFromServer").textContent = event.data;
+            }
+
+        }
+
+
+        websocket.onerror = function (error) {
+            console.log(`[error]`);
+        };
+
+        websocket.onclose = function () {
+            console.log("Info: connection closed");
+
+        };
+
+        function closeConnection() {
+            console.log("close init")
+            websocket.close(1000, "Logout")
+            window.location.href = "http://localhost:8080/logout";
+            console.log("Logged out")
+            // window.location.href = "http://localhost:8080/login.html"
+        }
+
+
+        function sendMessage() {
+            console.log("send init")
+            websocket.send(messageToServer.value);
+            messageToServer.value = "";
+        }
+
+        // document.forms.publish.onsubmit = function() {
+        //     let outgoingMessage = this.message.value;
+        //
+        //     socket.send(outgoingMessage);
+        //     return false;
+        // };
+
+        // socket.onmessage = function(event) {
+        //     let message = event.data;
+        //
+        //     let messageElem = document.createElement('div');
+        //     messageElem.textContent = message;
+        //     document.getElementById('messages').prepend(messageElem);
+        // }
+
+    </script>
+</head>
+<body>
+
+<!--<textarea id="dataFromServer" readonly="readonly" rows="10" cols="45"></textarea>-->
+<div id="dataFromServer"></div>
+
+<br/>
+<!--<input type="text" id="messageToServer" size="50"/>-->
+<input type="text" id="messageToServer"/>
+<input type="button" value="Send" onclick="sendMessage();"/>
+
+<!--<button onclick="close();">Logout</button>-->
+<!--<input type="button" id="logout" value="Logout" onclick="close();"/>-->
+<button onclick="closeConnection();">Logout</button>
+
+</body>
+</html>
