@@ -42,6 +42,6 @@ public class LogOutServlet extends HttpServlet {
         log.info("Cookies have been deleted");
         log.info("Redirecting to the main page...");
 
-        response.sendRedirect("index.html");
+        response.sendRedirect("/RandomNumberClientServerApp-1.0-SNAPSHOT/index.html");
     }
 }

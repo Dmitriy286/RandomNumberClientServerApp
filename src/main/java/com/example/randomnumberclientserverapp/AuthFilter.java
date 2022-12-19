@@ -48,11 +48,11 @@ public class AuthFilter implements Filter {
                 filterChain.doFilter(servletRequest, servletResponse);
             } else {
                 log.warn("Unauthorized access request (inner)");
-                response.sendRedirect("index.html");
+                response.sendRedirect("/RandomNumberClientServerApp-1.0-SNAPSHOT/index.html");
             }
         } else {
             log.warn("Unauthorized access request (outer)");
-            response.sendRedirect("index.html");
+            response.sendRedirect("/RandomNumberClientServerApp-1.0-SNAPSHOT/index.html");
         }
     }
 

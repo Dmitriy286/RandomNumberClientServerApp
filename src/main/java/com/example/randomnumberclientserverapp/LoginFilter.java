@@ -21,6 +21,7 @@ public class LoginFilter implements Filter {
 
     public void init(FilterConfig filterConfig) {
         this.context = filterConfig.getServletContext();
+        log.info("LoginFilter initialized");
     }
 
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -43,7 +44,7 @@ public class LoginFilter implements Filter {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            RequestDispatcher requestDispatcher = request.getServletContext().getRequestDispatcher("/index.html");
+            RequestDispatcher requestDispatcher = request.getServletContext().getRequestDispatcher("/RandomNumberClientServerApp-1.0-SNAPSHOT/index.html");
             requestDispatcher.include(servletRequest, servletResponse);
         }
     }
