@@ -19,7 +19,8 @@ public class ServerEndPoint {
 
     static List<ServerEndPoint> clients = new CopyOnWriteArrayList<>();
     private Session session;
-    private final ServerEndPoint.RandomNumberGen randomNumberGen = new ServerEndPoint.RandomNumberGen();
+
+    private static final ServerEndPoint.RandomNumberGen randomNumberGen = new ServerEndPoint.RandomNumberGen();
 
     @OnOpen
     public void onOpen(Session session, @PathParam("login") String login, EndpointConfig _) {
@@ -39,7 +40,7 @@ public class ServerEndPoint {
         clients.remove(this);
         log.info("One of the clients has logged out");
         if (clients.isEmpty()) {
-            randomNumberGen.interrupt();
+            randomNumberGen.disable();
         }
     }
 
@@ -48,12 +49,12 @@ public class ServerEndPoint {
      *
      * @param message integer value, which has to be broadcasted
      */
-    public void broadcast(Integer message) {
+    public static void broadcast(Integer message) {
         for (ServerEndPoint client : clients) {
             try {
                 client.session.getBasicRemote().sendText(message.toString());
             } catch (IOException e) {
-                clients.remove(this);
+                clients.remove(client);
                 log.info("Removing client...");
                 try {
                     client.session.close();
@@ -74,14 +75,24 @@ public class ServerEndPoint {
     /**
      * Inner class, which generates random number
      */
-    public class RandomNumberGen extends Thread {
+    private static class RandomNumberGen extends Thread {
         Random random = new Random();
         public int randomNumber = 0;
+        private boolean isActive;
+
+        private RandomNumberGen() {
+            this.isActive = true;
+        }
+
+        public void disable() {
+            this.isActive = false;
+        }
 
         @Override
         public void run() {
+            this.isActive = true;
             log.info("Broadcasting started");
-            while (true) {
+            while (this.isActive) {
                 randomNumber = random.nextInt();
                 broadcast(randomNumber);
                 log.info("Broadcasted: {}", randomNumber);
