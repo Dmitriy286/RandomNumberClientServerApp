@@ -27,7 +27,7 @@ public class ServerEndPoint {
     static {
         clients = new CopyOnWriteArrayList<>();
         random = new Random();
-        randomNumber = 0;
+        randomNumber = random.nextInt();
     }
 
     @OnOpen

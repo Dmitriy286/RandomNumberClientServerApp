@@ -17,13 +17,15 @@
                 let login = re.exec(cookie)[1];
                 websocket = new WebSocket(`ws://31.31.202.202:8080/RandomNumberClientServerApp-1.0-SNAPSHOT/ws/${login}`);
                 sessionStorage.setItem("reloading", true);
+                console.log("Websocket established. Realoading set to true")
             }
         } else {
-            document.getElementById("dataFromServer").textContent = eventData;
+            // document.getElementById("dataFromServer").textContent = eventData;
             console.log("Reloading...")
         }
 
         websocket.onopen = function (e) {
+            sessionStorage.setItem("reloading", true);
             console.log("[open] Connection established");
         };
 
