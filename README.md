@@ -1,6 +1,6 @@
 # Random Number Client-Server Application
-
 Клиент-серверное приложение.
+
 Сервер генерирует случайные числа. 
 На стороне клиента отображаются новые значения.
 
@@ -13,4 +13,4 @@ Java, Servlets, WebSockets, JUnit, slf4j, html, JS, OAuth, Docker.
 
 Деплой:
 Docker-контейнер развернут на облачном сервере.
-URL: http://95.163.233.98:8080/RandomNumberClientServerApp-1.0-SNAPSHOT/index.html
+URL: http://31.31.202.202:8080/RandomNumberClientServerApp-1.0-SNAPSHOT/index.html
