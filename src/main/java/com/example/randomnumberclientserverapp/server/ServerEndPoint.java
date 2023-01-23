@@ -17,18 +17,28 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class ServerEndPoint {
     private final static Logger log = LoggerFactory.getLogger(User.class);
 
-    static List<ServerEndPoint> clients = new CopyOnWriteArrayList<>();
+    static List<ServerEndPoint> clients;
     private Session session;
+    private static ServerEndPoint.RandomNumberGen randomNumberGen;
 
-    private static final ServerEndPoint.RandomNumberGen randomNumberGen = new ServerEndPoint.RandomNumberGen();
+    static Random random;
+    public static int randomNumber;
+
+    static {
+        clients = new CopyOnWriteArrayList<>();
+        random = new Random();
+        randomNumber = 0;
+    }
 
     @OnOpen
-    public void onOpen(Session session, @PathParam("login") String login, EndpointConfig _) {
+    public void onOpen(Session session, @PathParam("login") String login, EndpointConfig _) throws IOException {
         log.info("Login passed to ServerEndPoint: {}", login);
         if (clients.isEmpty()) {
+            randomNumberGen = new ServerEndPoint.RandomNumberGen();
             randomNumberGen.start();
         }
         this.session = session;
+        this.session.getBasicRemote().sendText(String.valueOf(randomNumber));
         clients.add(this);
         UserDAO.findUserByLogin(login).setClientConnection(this);
         log.info("New client added: {}", UserDAO.findUserByLogin(login));
@@ -41,6 +51,7 @@ public class ServerEndPoint {
         log.info("One of the clients has logged out");
         if (clients.isEmpty()) {
             randomNumberGen.disable();
+            randomNumberGen = null;
         }
     }
 
@@ -76,8 +87,6 @@ public class ServerEndPoint {
      * Inner class, which generates random number
      */
     private static class RandomNumberGen extends Thread {
-        Random random = new Random();
-        public int randomNumber = 0;
         private boolean isActive;
 
         private RandomNumberGen() {
