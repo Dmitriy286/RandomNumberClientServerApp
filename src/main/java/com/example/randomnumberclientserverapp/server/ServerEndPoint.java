@@ -28,15 +28,13 @@ public class ServerEndPoint {
         clients = new CopyOnWriteArrayList<>();
         random = new Random();
         randomNumber = random.nextInt();
+        randomNumberGen = new ServerEndPoint.RandomNumberGen();
+        randomNumberGen.start();
     }
 
     @OnOpen
     public void onOpen(Session session, @PathParam("login") String login, EndpointConfig _) throws IOException {
         log.info("Login passed to ServerEndPoint: {}", login);
-        if (clients.isEmpty()) {
-            randomNumberGen = new ServerEndPoint.RandomNumberGen();
-            randomNumberGen.start();
-        }
         this.session = session;
         this.session.getBasicRemote().sendText(String.valueOf(randomNumber));
         clients.add(this);
@@ -49,10 +47,6 @@ public class ServerEndPoint {
         log.warn("Socket closed: {}", reason.getReasonPhrase());
         clients.remove(this);
         log.info("One of the clients has logged out");
-        if (clients.isEmpty()) {
-            randomNumberGen.disable();
-            randomNumberGen = null;
-        }
     }
 
     /**
