@@ -11,15 +11,17 @@
         let websocket;
         if (!sessionStorage.getItem("reloading")) {
             if (re.exec(cookie) == null) {
-                window.location.href = "http://31.31.202.202:8080/RandomNumberClientServerApp-1.0-SNAPSHOT/index.html";
+                window.location.href = "http://localhost:8080/index.html";
                 sessionStorage.setItem("reloading", false);
             } else {
                 let login = re.exec(cookie)[1];
-                websocket = new WebSocket(`ws://31.31.202.202:8080/RandomNumberClientServerApp-1.0-SNAPSHOT/ws/${login}`);
+                websocket = new WebSocket(`ws://localhost:8080/ws/${login}`);
                 sessionStorage.setItem("reloading", true);
+                localStorage.setItem("websocket", websocket);
                 console.log("Websocket established. Realoading set to true")
             }
         } else {
+            websocket = localStorage.getItem("websocket");
             // document.getElementById("dataFromServer").textContent = eventData;
             console.log("Reloading...")
         }
@@ -52,7 +54,7 @@
             if (websocket != null) {
                 websocket.close(1000, "Logout");
             }
-            window.location.href = "http://31.31.202.202:8080/RandomNumberClientServerApp-1.0-SNAPSHOT/logout";
+            window.location.href = "http://localhost:8080/logout";
             sessionStorage.setItem("reloading", false);
             console.log("Logged out")
         }

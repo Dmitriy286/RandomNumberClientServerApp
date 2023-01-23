@@ -30,6 +30,6 @@ public class LoginServlet extends HttpServlet {
         response.addCookie(cookieToken);
         response.addCookie(cookieLogin);
 
-        response.sendRedirect("/RandomNumberClientServerApp-1.0-SNAPSHOT/client.html");
+        response.sendRedirect("/client.html");
     }
 }

@@ -44,7 +44,7 @@ public class LoginFilter implements Filter {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            RequestDispatcher requestDispatcher = request.getServletContext().getRequestDispatcher("/RandomNumberClientServerApp-1.0-SNAPSHOT/index.html");
+            RequestDispatcher requestDispatcher = request.getServletContext().getRequestDispatcher("/index.html");
             requestDispatcher.include(servletRequest, servletResponse);
         }
     }

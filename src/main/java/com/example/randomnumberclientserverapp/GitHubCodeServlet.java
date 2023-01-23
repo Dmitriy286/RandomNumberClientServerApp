@@ -24,7 +24,7 @@ public class GitHubCodeServlet extends HttpServlet {
         GitHubApi gitApi = new GitHubApi(code);
         User newUser = gitApi.createOrRestoreUser();
 
-        String path = "/RandomNumberClientServerApp-1.0-SNAPSHOT/login.html";
+        String path = "/login.html";
         response.sendRedirect(path + "?token=" + newUser.getGitHubToken() + "&login=" + newUser.getLogin());
     }
 }
