@@ -5,14 +5,22 @@
     <link rel="stylesheet" href="style.css" type="text/css">
     <title>Very important number generator</title>
     <script type="text/javascript">
+        let eventData;
         let re = /login=(.+);*/
         let cookie = document.cookie;
         let websocket;
-        if (re.exec(cookie) == null) {
-            window.location.href = "http://31.31.202.202:8080/RandomNumberClientServerApp-1.0-SNAPSHOT/index.html";
+        if (!sessionStorage.getItem("reloading")) {
+            if (re.exec(cookie) == null) {
+                window.location.href = "http://31.31.202.202:8080/RandomNumberClientServerApp-1.0-SNAPSHOT/index.html";
+                sessionStorage.setItem("reloading", false);
+            } else {
+                let login = re.exec(cookie)[1];
+                websocket = new WebSocket(`ws://31.31.202.202:8080/RandomNumberClientServerApp-1.0-SNAPSHOT/ws/${login}`);
+                sessionStorage.setItem("reloading", true);
+            }
         } else {
-            let login = re.exec(cookie)[1];
-            websocket = new WebSocket(`ws://31.31.202.202:8080/RandomNumberClientServerApp-1.0-SNAPSHOT/ws/${login}`);
+            document.getElementById("dataFromServer").textContent = eventData;
+            console.log("Reloading...")
         }
 
         websocket.onopen = function (e) {
@@ -23,7 +31,8 @@
             console.log("Message received:");
             console.log(event.data);
             if (event.data != null) {
-                document.getElementById("dataFromServer").textContent = event.data;
+                eventData = event.data;
+                document.getElementById("dataFromServer").textContent = eventData;
             }
         }
 
@@ -33,6 +42,7 @@
 
         websocket.onclose = function () {
             console.log("Info: connection closed");
+            sessionStorage.setItem("reloading", false);
         };
 
         function closeConnection() {
@@ -41,6 +51,7 @@
                 websocket.close(1000, "Logout");
             }
             window.location.href = "http://31.31.202.202:8080/RandomNumberClientServerApp-1.0-SNAPSHOT/logout";
+            sessionStorage.setItem("reloading", false);
             console.log("Logged out")
         }
     </script>
