@@ -6,6 +6,12 @@
     <link rel="stylesheet" href="style.css" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script>
+        let re = /login=(.+);*/
+        let cookie = document.cookie;
+        if (re.exec(cookie) != null) {
+            window.location.href = "http://31.31.202.202:8080/RandomNumberClientServerApp-1.0-SNAPSHOT/client.html";
+        }
+
         function onClick() {
             document.location='https://github.com/login/oauth/authorize?client_id=8d45b84171f5ae17cfce';
         }
