@@ -22,8 +22,10 @@ public class GitHubApi {
 
     public GitHubApi(String codeForToken) {
         this.codeForToken = codeForToken;
-        this.clientId = "8d45b84171f5ae17cfce";
-        this.clientSecret = "6da33d3cd857e5692afc21e779c39acc10822b5c";
+//        this.clientId = "8d45b84171f5ae17cfce";
+        this.clientId = "22473e191d74e75f8a71";
+//        this.clientSecret = "6da33d3cd857e5692afc21e779c39acc10822b5c";
+        this.clientSecret = "f4161e276f0cb6d18713d1c5c9d9577a6cbbaab5";
     }
 
     public String getToken() throws IOException {

@@ -10,10 +10,10 @@
         let websocket;
 
         if (re.exec(cookie) == null) {
-            window.location.href = "http://31.31.202.202:8080/RandomNumberClientServerApp-1.0-SNAPSHOT/index.html";
+            window.location.href = "http://185.182.110.250:8080/RandomNumberClientServerApp-1.0-SNAPSHOT/index.html";
         } else {
             let login = re.exec(cookie)[1];
-            websocket = new WebSocket(`ws://31.31.202.202:8080/RandomNumberClientServerApp-1.0-SNAPSHOT/ws/${login}`);
+            websocket = new WebSocket(`ws://185.182.110.250:8080/RandomNumberClientServerApp-1.0-SNAPSHOT/ws/${login}`);
         }
 
 
@@ -42,7 +42,7 @@
             if (websocket != null) {
                 websocket.close(1000, "Logout");
             }
-            window.location.href = "http://31.31.202.202:8080/RandomNumberClientServerApp-1.0-SNAPSHOT/logout";
+            window.location.href = "http://185.182.110.250:8080/RandomNumberClientServerApp-1.0-SNAPSHOT/logout";
             console.log("Logged out")
         }
     </script>

@@ -13,4 +13,4 @@ Java, Servlets, WebSockets, JUnit, slf4j, html, JS, OAuth, Docker.
 
 Деплой:
 Docker-контейнер развернут на облачном сервере.
-URL: http://31.31.202.202:8080/RandomNumberClientServerApp-1.0-SNAPSHOT/index.html
+URL: http://185.182.110.250:8080/RandomNumberClientServerApp-1.0-SNAPSHOT/index.html
